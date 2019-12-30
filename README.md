@@ -34,6 +34,7 @@ Desempaquetando objetos: 100% (4/4), listo.
 ## Running ugly-firewall
 
 After cloning the repository change to ugly-firewall dir and run ./uf
+
 Or make a link for easy run: ln -s PATH/ugly-firewall/uf /usr/bin/fw
 
 ```shell
@@ -80,6 +81,44 @@ ip6 pkts bytes target     prot opt in     out     source               destinati
     1    56 LOG-DROP-OUTPUT  all      *      *       ::/0                 ::/0                
 UGLY-FIREWALL: [quit] [zero-counters] [flush] [base] [load] [policy] [ip4] [ip6]
 ```
+
+## Options
+```shell
+UGLY-FIREWALL: [quit] [zero-counters] [flush] [base] [load] [policy] [ip4] [ip6]
+```
+
+- q quit
+- z reset counters
+- f delete all rules and chains
+- b load prebuild base rules
+- l load additional user rules
+- p policy menu 
+- 4 show/hide ip4
+- 6 show/hide ip6
+- r undocumented: list iptables rules
+
+## How to make rulescripts
+
+1. We need a bash script file that load the ugly-firewall config file:
+```
+#!/bin/bash
+source $(dirname $0)/uf.config.sh
+```
+2. with the iptables rules we desire, for example:
+```
+$iptables -I OUTPUT 1 -o $out_int -j LOG-ACCEPT-OUTPUT
+$ip6tables -I OUTPUT 1 -o $out_int -j LOG-ACCEPT-OUTPUT
+```
+3. and save it in the ugly-firewall directory with the name we want ended with ".uf.sh" so that uglu-firewall can find it and be available in the loading menu.
+```
+iptables.output.accept.all.uf.sh
+```
+
+## Extra config
+
+To see or change available interfaces edit **uf.config.sh**
+
+To see or change available LOG-RULES edit **iptables.log.sh**
 
 ## Contributing and support
 
