@@ -35,8 +35,9 @@ version="version 0.1"
 ############################################
 # Load config file 
 ############################################
-BASE_DIR=$(dirname $0)
-source $(dirname $0)/uf.config.sh
+SCRIPT=$(readlink -f $0)
+BASE_DIR=$(dirname $SCRIPT)
+source $BASE_DIR/uf.config.sh
 
 ############################################
 # Clean the firewall rules

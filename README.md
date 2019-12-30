@@ -33,14 +33,14 @@ Desempaquetando objetos: 100% (4/4), listo.
 
 ## Running ugly-firewall
 
-After cloning the repository change to iptables dir and run ./uf
-Making a link to easy launch: ln -s path_to_iptables_uf /usr/bin/fw
-
+After cloning the repository change to ugly-firewall dir and run ./uf
+Or make a link for easy run: ln -s PATH/ugly-firewall/uf /usr/bin/fw
 
 ```shell
-root@kali:~# cd iptables/                                                                                                    
-root@kali:~/iptables# ./fw                                                                      
-                                                                                                                                                              
+root@kali:~# cd ugly-firewall/                                                                         
+root@kali:~/ugly-firewall# ./uf
+
+root@kali:~# fw                                                                                                                              
 ```
 
 ### Output While Running
