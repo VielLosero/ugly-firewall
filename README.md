@@ -19,10 +19,16 @@ And more.
 These instructions will get you a copy of the project.
 
 ### Installing
-git clone url                                                                                 
+git clone https://github.com/VielLosero/ugly-firewall.git                                                              
 
 ```shell
-root@kali:~# git clone url 
+root@kali:~/data/git-repos/vielLosero# git clone https://github.com/VielLosero/ugly-firewall.git                                                              
+Clonando en 'ugly-firewall'...                                                                                                                                
+remote: Enumerating objects: 4, done.                                                                                                                         
+remote: Counting objects: 100% (4/4), done.                                                                                                                   
+remote: Compressing objects: 100% (4/4), done.                                                                                                                
+remote: Total 4 (delta 0), reused 0 (delta 0), pack-reused 0                                                                                                  
+Desempaquetando objetos: 100% (4/4), listo.                  
 ```
 
 ## Running ugly-firewall
