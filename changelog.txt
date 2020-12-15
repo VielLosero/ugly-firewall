@@ -1,0 +1,23 @@
+Ugly-firewall
+
+version .04
+Added system to remove rules
+Added system to change interfaces
+
+version .03
+Added load preconfigured firewall tipes, like simple,wireless-ap,dlna,etc...
+
+version .02
+Added log_lvl to show and log all rules, or show raw and filter and log only drop paquets.
+Renamed chain names to show it more friendly.
+	- from LOG-ACCEPT-OUTPUT to LOG-FIL-OUT-ACCEPT
+	- etc...
+
+version .01
+Added a simple way to flush all firewall rules
+Added policy files to easy accept or drop all tables and chains
+Maked firewall rules to redirect to chain with LOG- prefix
+Added show firewall rules with LOG- prefix
+Added flush option to clear paquet hits
+Added config file
+

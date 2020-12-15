@@ -30,7 +30,7 @@
 #OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #Ugly-Firewall
-version="version 0.1"
+version="version 0.3"
 
 ############################################
 # Load config file 
@@ -38,6 +38,33 @@ version="version 0.1"
 SCRIPT=$(readlink -f $0)
 BASE_DIR=$(dirname $SCRIPT)
 source $BASE_DIR/uf.config.sh
+source $BASE_DIR/uf.config.interfaces.sh
+
+############################################
+# Load interfaces
+############################################
+interfaces(){
+read -e -i "$WAN" -p "Enter new WAN: " WAN && WAN=${WAN:-$WAN}
+read -e -i "$LAN" -p "Enter new LAN: " LAN && LAN=${LAN:-$LAN}
+read -e -i "$VPN" -p "Enter new VPN: " VPN && VPN=${VPN:-$VPN}
+read -e -i "$in_int" -p "Enter new in_int: " in_int && in_int=${in_int:-$in_int}
+read -e -i "$out_int" -p "Enter new out_int: " out_int && out_int=${out_int:-$out_int}
+echo "Write interfaces to uf.config.interfaces.sh"
+cat <<EOF> $BASE_DIR/uf.config.interfaces.sh
+#!/ in/bash
+
+#Ugly-Firewall interfaces's config file
+
+############################################
+# Interfaces 
+############################################
+WAN=$WAN
+LAN=$LAN
+VPN=$VPN
+out_int=$out_int
+in_int=$in_int
+EOF
+}
 
 ############################################
 # Clean the firewall rules
@@ -85,6 +112,7 @@ rules_ip4(){
 echo -e "\e[1;32mip4 pkts bytes target     prot opt in     out     source               destination"
 for table in ${tables[@]}; do
 $iptables -t $table -L -n -v | grep " LOG-" | grep -v "Chain"
+#$iptables -t $table -L -n -v --line-numbers | grep " LOG-" | grep -v "Chain"
 done
 }
 
@@ -92,6 +120,7 @@ rules_ip6(){
 echo -e "\e[1;33mip6 pkts bytes target     prot opt in     out     source               destination"
 for table in ${tables[@]}; do
 $ip6tables -t $table -L -n -v | grep " LOG-" | grep -v "Chain"
+#$ip6tables -t $table -L -n -v --line-numbers | grep " LOG-" | grep -v "Chain"
 done
 }
 
@@ -147,26 +176,60 @@ done && echo -e "$RUN Zeroed all ip4 and ip6, tables and chains $OK"
 # Load log rules
 ############################################
 load_log(){
-$BASE_DIR/iptables.log.sh && echo -e "$RUN load log rules $OK" || echo -e "$RUN load log rules $FAIL"
+if [[ $log_lvl -eq 0 ]] ; then
+$BASE_DIR/iptables.log.drop.sh && echo -e "$RUN load log.drop $OK" || echo -e "$RUN load log.drop $FAIL"
+else
+$BASE_DIR/iptables.log.all.sh && echo -e "$RUN load log.all $OK" || echo -e "$RUN load log.all $FAIL"
+fi
 }
 
 ############################################
 # Load base firewall
 ############################################
 base(){
-flush && load_log && $BASE_DIR/iptables.base.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
+if [ $(cat /etc/hostname) == "ohm" ] ; then
+	flush && load_log && $BASE_DIR/iptables.base.server.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
+else
+	flush && load_log && $BASE_DIR/iptables.base.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
+	#flush && load_log && $BASE_DIR/iptables.base.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
+fi
+}
+
+
+############################################
+# Menu to load rulescripts/firescripts
+############################################
+load(){
+clear
+echo " "
+echo "--- Ugly firewall load screen --- "
+echo " "
+echo -e " Press [\e[1;32ma\e[00m] to load user rules "
+echo -e " Press [\e[1;31md\e[00m] to load user rules "
+echo -e " Press [\e[1;34mf\e[00m] to load preconfigured firewalls"
+echo " "
+read -N 1 -p "Select option: " option
+case $option in
+	a) load_rulescript ADD
+		;;
+	d) load_rulescript DEL
+		;;
+	f) load_firescript
+		;;
+	*) echo -e "$RUN Invalid option, selection $FAIL"
+esac
 }
 
 ############################################
 # Menu to load user rulescripts 
 ############################################
-load(){
+load_rulescript(){
 clear
 echo " "
 echo "--- Ugly firewall rulescripts --- "
 echo " "
 IFS=" "
-declare -a rules=($(echo ${BASE_DIR}/*.uf*))
+declare -a rules=($(echo ${BASE_DIR}/rules.uf*))
 for rule in ${!rules[@]} ; do
 	file=$(basename ${rules[$rule]})
 	echo "[$rule] $file"
@@ -175,7 +238,7 @@ echo ""
 read -p "Select option: " option
 if [[ " ${!rules[@]} " =~ " $option " ]]; then
 	echo -e "$RUN loading ${rules[$option]} $OK"
-	${rules[$option]}
+	${rules[$option]} $1
 else
 	echo -e "$RUN Invalid option, selection $FAIL"
 fi
@@ -183,19 +246,53 @@ fi
 }
 
 ############################################
+# Menu to load user firescripts 
+############################################
+load_firescript(){
+clear
+echo " "
+echo "--- Ugly firewall firescripts --- "
+echo " "
+IFS=" "
+declare -a firewalls=($(echo ${BASE_DIR}/firewall.uf*))
+for firewall in ${!firewalls[@]} ; do
+	file=$(basename ${firewalls[$firewall]})
+	echo "[$firewall] $file"
+done
+echo ""
+read -p "Select option: " option
+if [[ " ${!firewalls[@]} " =~ " $option " ]]; then
+	echo -e "$RUN loading ${firewalls[$option]} $OK"
+	${firewalls[$option]}
+else
+	echo -e "$RUN Invalid option, selection $FAIL"
+fi
+       	
+}
+############################################
 # Main loop 
 ############################################
-while :; do	
+while :; do
+	WAN=$(cat $BASE_DIR/uf.config.interfaces.sh | grep WAN | awk -F= '{print $2}')
+	LAN=$(cat $BASE_DIR/uf.config.interfaces.sh | grep LAN | awk -F= '{print $2}')
+	VPN=$(cat $BASE_DIR/uf.config.interfaces.sh | grep VPN | awk -F= '{print $2}')
+	in_int=$(cat $BASE_DIR/uf.config.interfaces.sh | grep in_int | awk -F= '{print $2}')
+	out_int=$(cat $BASE_DIR/uf.config.interfaces.sh | grep out_int | awk -F= '{print $2}')
 	tput clear
+	echo -e "\e[00mINTERFACES: WAN:$WAN LAN:$LAN VPN:$VPN in_int:$in_int out_in:$out_int"
 	[[ $show_ip4 -eq 1 ]] && rules_ip4
 	[[ $show_ip6 -eq 1 ]] && rules_ip6
 	# -t for timeout, -N for just 1 character
-    	echo -e "\e[00mUGLY-FIREWALL: [\e[1;31mq\e[00muit] [\e[1;34mz\e[00mero-counters] [\e[1;34mf\e[00mlush] [\e[1;34mb\e[00mase] [\e[1;34ml\e[00moad] [\e[1;34mp\e[00molicy] [ip\e[1;34m4\e[00m] [ip\e[1;34m6\e[00m]" && read -t .1 -N 1 input
+    	echo -e "\e[00mUGLY-FIREWALL: [\e[1;31mq\e[00muit] [\e[1;34mz\e[00mero-counters] [\e[1;34mf\e[00mlush] [\e[1;34mb\e[00mase] [\e[1;34ml\e[00moad] [\e[1;34mp\e[00molicy] [ip\e[1;34m4\e[00m] [ip\e[1;34m6\e[00m] [lo\e[1;34mg\e[00m_lvl] [\e[1;34mi\e[00mnterfaces]" && read -t .1 -N 1 input
 	
 case $input in
 	f|flush)	flush
 		;;
 	r|rules)	rules
+			;;
+	g|log)		
+			if [[ $log_lvl -eq 1 ]]; then log_lvl=0 && base ; else
+			if [[ $log_lvl -eq 0 ]]; then log_lvl=1 && base ; fi ;fi
 			;;
 	b|base)		base
 		;;
@@ -212,6 +309,8 @@ case $input in
 		       	if [[ $show_ip6 -eq 0 ]] ; then show_ip6=1 ; fi ; fi
 		;;
 	a|all)		show_ip6=1 && show_ip4=1
+		;;
+	i|interfaces)	interfaces
 		;;
 	q|quit)		break
 		;;
