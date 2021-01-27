@@ -1,5 +1,9 @@
 Ugly-firewall
 
+version .05
+Added echo for each file that load rule,firewall,base,etc.
+for i in $(ls path/ugly-firewall/rules.uf.* ) ; do sed -i 2iecho\ \"\ [*]\ Loading\ $(echo $i | awk -F"/" '{print $5}')\" $i ;done
+
 version .04
 Added system to remove rules
 Added system to change interfaces

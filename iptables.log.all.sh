@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source $(dirname $0)/uf.config.sh
+echo "[ ++ ] loading LOG tables and chains for match ALL"
 
 $iptables -t raw -N LOG-RAW-PRE
 $iptables -t raw -N LOG-RAW-OUT

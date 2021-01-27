@@ -3,6 +3,7 @@
 ACTION=$1
 source $(dirname $0)/uf.config.sh
 source $(dirname $0)/uf.config.interfaces.sh
+echo -e "$ACT $(basename $0)"
 
 
 $iptables $ACTION_INPUT -m conntrack --ctstate INVALID,NEW -j LOG-FIL-IN-DROP

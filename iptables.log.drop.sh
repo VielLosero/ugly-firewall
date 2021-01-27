@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source $(dirname $0)/uf.config.sh
+echo "[ ii ] loading LOG tables and chains for match DROP only"
 
 $iptables -t raw -N LOG-RAW-PRE
 $iptables -t raw -N LOG-RAW-OUT

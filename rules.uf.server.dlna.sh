@@ -3,6 +3,7 @@
 ACTION=$1
 source $(dirname $0)/uf.config.sh
 source $(dirname $0)/uf.config.interfaces.sh
+echo -e "$ACT $(basename $0)"
 
 
 $iptables $ACTION_INPUT -i $LAN -p udp -m udp --dport 1900 -j LOG-FIL-OUT-ACCEPT

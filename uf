@@ -51,8 +51,6 @@ read -e -i "$in_int" -p "Enter new in_int: " in_int && in_int=${in_int:-$in_int}
 read -e -i "$out_int" -p "Enter new out_int: " out_int && out_int=${out_int:-$out_int}
 echo "Write interfaces to uf.config.interfaces.sh"
 cat <<EOF> $BASE_DIR/uf.config.interfaces.sh
-#!/ in/bash
-
 #Ugly-Firewall interfaces's config file
 
 ############################################
@@ -61,8 +59,8 @@ cat <<EOF> $BASE_DIR/uf.config.interfaces.sh
 WAN=$WAN
 LAN=$LAN
 VPN=$VPN
-out_int=$out_int
 in_int=$in_int
+out_int=$out_int
 EOF
 }
 
@@ -73,7 +71,7 @@ flush(){
 for table in ${tables[@]}; do
 $iptables -t $table -F; $iptables -t $table -X
 $ip6tables -t $table -F; $ip6tables -t $table -X
-done && echo -e "$RUN flushing all ip4 and ip6, tables and chains $OK"
+done && echo -e "$DEL flushed all ip4 and ip6, tables and chains"
 }
 
 ############################################
@@ -154,11 +152,11 @@ done
 }
 
 drop(){
-$BASE_DIR/iptables.policy.drop.sh && echo -e "$RUN set all policy firewall to DROP $OK" || echo -e "$RUN load policy DROP $FAIL"
+$BASE_DIR/iptables.policy.drop.sh && echo -e "$OK set all policy firewall to DROP" || echo -e "$FAIL load policy DROP"
 }
 
 accept(){
-$BASE_DIR/iptables.policy.accept.sh && echo -e "$RUN set all policy firewall to ACCEPT $OK" || echo -e "$RUN load policy ACCEPT $FAIL"
+$BASE_DIR/iptables.policy.accept.sh && echo -e "$OK set all policy firewall to ACCEPT" || echo -e "$FAIL load policy ACCEPT"
 }
 
 ############################################
@@ -169,7 +167,7 @@ zero(){
 for table in ${tables[@]}; do
 $iptables -t $table -Z
 $ip6tables -t $table -Z
-done && echo -e "$RUN Zeroed all ip4 and ip6, tables and chains $OK"
+done && echo -e "$OK Zeroed all ip4 and ip6, tables and chains"
 }
 
 ############################################
@@ -177,9 +175,9 @@ done && echo -e "$RUN Zeroed all ip4 and ip6, tables and chains $OK"
 ############################################
 load_log(){
 if [[ $log_lvl -eq 0 ]] ; then
-$BASE_DIR/iptables.log.drop.sh && echo -e "$RUN load log.drop $OK" || echo -e "$RUN load log.drop $FAIL"
+$BASE_DIR/iptables.log.drop.sh && echo -e "$OK load log.drop" || echo -e "$FAIL load log.drop"
 else
-$BASE_DIR/iptables.log.all.sh && echo -e "$RUN load log.all $OK" || echo -e "$RUN load log.all $FAIL"
+$BASE_DIR/iptables.log.all.sh && echo -e "$OK load log.all" || echo -e "$FAIL load log.all"
 fi
 }
 
@@ -188,9 +186,9 @@ fi
 ############################################
 base(){
 if [ $(cat /etc/hostname) == "ohm" ] ; then
-	flush && load_log && $BASE_DIR/iptables.base.server.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
+	flush && load_log && $BASE_DIR/iptables.base.server.sh && echo -e "$OK base system firewall" || echo -e "$FAIL base system firewall"
 else
-	flush && load_log && $BASE_DIR/iptables.base.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
+	flush && load_log && $BASE_DIR/iptables.base.sh && echo -e "$OK base system firewall" || echo -e "$FAIL base system firewall"
 	#flush && load_log && $BASE_DIR/iptables.base.sh && echo -e "$RUN base system firewall $OK" || echo -e "$RUN base system firewall $FAIL"
 fi
 }
@@ -216,7 +214,7 @@ case $option in
 		;;
 	f) load_firescript
 		;;
-	*) echo -e "$RUN Invalid option, selection $FAIL"
+	*) echo -e "\n$FAIL Invalid option, selection"
 esac
 }
 
@@ -237,10 +235,10 @@ done
 echo ""
 read -p "Select option: " option
 if [[ " ${!rules[@]} " =~ " $option " ]]; then
-	echo -e "$RUN loading ${rules[$option]} $OK"
+	echo -e "$OK loading ${rules[$option]}"
 	${rules[$option]} $1
 else
-	echo -e "$RUN Invalid option, selection $FAIL"
+	echo -e "$FAIL Invalid option, selection"
 fi
        	
 }
@@ -262,10 +260,10 @@ done
 echo ""
 read -p "Select option: " option
 if [[ " ${!firewalls[@]} " =~ " $option " ]]; then
-	echo -e "$RUN loading ${firewalls[$option]} $OK"
+	echo -e "$OK loading ${firewalls[$option]}"
 	${firewalls[$option]}
 else
-	echo -e "$RUN Invalid option, selection $FAIL"
+	echo -e "$FAIL Invalid option, selection"
 fi
        	
 }

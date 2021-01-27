@@ -6,9 +6,10 @@
 # Variables 
 ############################################
 
-RUN="[\e[1;34m*\e[00m]"
-FAIL="[\e[1;31mfailed\e[00m]"
-OK="[\e[1;32mok\e[00m]"
+RUN="[\e[1;34m ** \e[00m]"
+FAIL="[\e[1;31mfail\e[00m]"
+OK="[\e[1;32m ok \e[00m]"
+ACT="[\e[1;32m ++ \e[00m]"
 
 ACTION_INPUT="-I INPUT 1"
 ACTION_FORWARD="-I FORWARD 1"
@@ -16,6 +17,7 @@ ACTION_OUTPUT="-I OUTPUT 1"
 ACTION_PREROUTING="-I PREROUTING 1"
 ACTION_POSTROUTING="-I POSTROUTING 1"
 if [ "$ACTION" == "DEL" ] ; then
+	ACT="[\e[1;31m -- \e[00m]"
 	ACTION_INPUT="-D INPUT"
 	ACTION_FORWARD="-D FORWARD"
 	ACTION_OUTPUT="-D OUTPUT"

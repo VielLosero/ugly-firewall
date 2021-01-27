@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source $(dirname $0)/uf.config.sh
+echo "[ ii ] loading Policy DROP"
 
 $iptables -t raw -P PREROUTING DROP
 $iptables -t raw -P OUTPUT DROP

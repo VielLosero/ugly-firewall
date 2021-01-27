@@ -15,10 +15,11 @@ $(dirname $0)/rules.uf.loopback.sh
 $(dirname $0)/rules.uf.drop.sh
 $(dirname $0)/rules.uf.server.ssh.sh
 $(dirname $0)/rules.uf.server.dhcp.sh
+$(dirname $0)/rules.uf.server.dns.sh
 $(dirname $0)/rules.uf.masquerade.sh
-$(dirname $0)/rules.uf.output.client.vpn.sh
-$(dirname $0)/rules.uf.output.client.p2p.sh
-$(dirname $0)/rules.uf.output.client.dns.sh
+$(dirname $0)/rules.uf.output.vpn.sh
+$(dirname $0)/rules.uf.output.p2p.sh
+$(dirname $0)/rules.uf.output.dns.sh
 
 
 

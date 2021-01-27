@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source $(dirname $0)/uf.config.sh
+echo "[ ii ] loading Policy ACCEPT"
 
 $iptables -t raw -P PREROUTING ACCEPT
 $iptables -t raw -P OUTPUT ACCEPT
