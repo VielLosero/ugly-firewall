@@ -47,49 +47,39 @@ root@kali:~# fw
 ### Output While Running
 
 ```shell
-INTERFACES: WAN:br0 LAN:br0 VPN:tun0 in_int:br0 out_in:tun0
+UGLY-FIREWALL: [quit] [zero-counters] [flush] [base] [load] [policy] [ip4] [ip6] [log_lvl] [interfaces]
+INTERFACES: WAN:eth0 LAN:bond0 VPN:tun0 in_int:bond0 out_in:tun0
 ip4 pkts bytes target     prot opt in     out     source               destination
- 2937 2128K LOG-RAW-PRE  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
- 2812  305K LOG-RAW-OUT  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
-    0     0 LOG-FIL-IN-DROP  all  --  !lo    *       0.0.0.0/0            127.0.0.0/8         
-  100  9626 LOG-FIL-IN-ACCEPT  all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
- 2804 2111K LOG-FIL-IN-ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
-   33  7578 LOG-FIL-IN-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW
-    0     0 LOG-FIL-IN-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
-    0     0 LOG-FIL-FORWARD-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
-   39  3704 LOG-FIL-OUT-ACCEPT  tcp  --  *      tun0    0.0.0.0/0            0.0.0.0/0            tcp dpt:443
-    0     0 LOG-FIL-OUT-ACCEPT  tcp  --  *      tun0    0.0.0.0/0            0.0.0.0/0            tcp dpt:80
-    0     0 LOG-FIL-OUT-ACCEPT  tcp  --  *      tun0    0.0.0.0/0            0.0.0.0/0            tcp dpt:53 owner UID match 972
-    0     0 LOG-FIL-OUT-ACCEPT  udp  --  *      tun0    0.0.0.0/0            0.0.0.0/0            udp dpt:53 owner UID match 972
-    0     0 LOG-FIL-OUT-ACCEPT  udp  --  *      br0     0.0.0.0/0            0.0.0.0/0            udp dpt:5060
-    0     0 LOG-FIL-OUT-ACCEPT  udp  --  *      br0     0.0.0.0/0            0.0.0.0/0            udp dpt:1194
-    0     0 LOG-FIL-OUT-ACCEPT  udp  --  *      br0     0.0.0.0/0            0.0.0.0/0            udp dpt:4569
- 1499  190K LOG-FIL-OUT-ACCEPT  udp  --  *      br0     0.0.0.0/0            0.0.0.0/0            udp dpt:443
-    0     0 LOG-FIL-OUT-ACCEPT  udp  --  *      br0     0.0.0.0/0            0.0.0.0/0            udp dpt:80
-  100  9626 LOG-FIL-OUT-ACCEPT  all  --  *      lo      0.0.0.0/0            127.0.0.1           
-    0     0 LOG-FIL-OUT-ACCEPT  icmp --  *      *       0.0.0.0/0            0.0.0.0/0           
-    1    40 LOG-FIL-OUT-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0           
+10252   10M LOG-RAW-PRE  all  --  *      *       0.0.0.0/0            0.0.0.0/0
+11283  847K LOG-RAW-OUT  all  --  *      *       0.0.0.0/0            0.0.0.0/0
+    0     0 LOG-FIL-IN-DROP  all  --  !lo    *       0.0.0.0/0            127.0.0.0/8
+  404 41168 LOG-FIL-IN-ACCEPT  all  --  lo     *       0.0.0.0/0            0.0.0.0/0
+ 9847   10M LOG-FIL-IN-ACCEPT  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+    1   328 LOG-FIL-IN-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID,NEW
+    0     0 LOG-FIL-IN-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0
+    0     0 LOG-FIL-FORWARD-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0
+ 3955  311K LOG-FIL-OUT-ACCEPT  tcp  --  *      wlan0   0.0.0.0/0            0.0.0.0/0            tcp dpt:443 state NEW,ESTABLISHED
+  208 15747 LOG-FIL-OUT-ACCEPT  tcp  --  *      wlan0   0.0.0.0/0            0.0.0.0/0            tcp dpt:80 state NEW,ESTABLISHED
+    0     0 LOG-FIL-OUT-ACCEPT  tcp  --  *      wlan0   0.0.0.0/0            0.0.0.0/0            tcp dpt:53 owner UID match 972
+  653 47640 LOG-FIL-OUT-ACCEPT  udp  --  *      wlan0   0.0.0.0/0            0.0.0.0/0            udp dpt:53 owner UID match 972
+ 5995  414K LOG-FIL-OUT-ACCEPT  tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 state NEW,ESTABLISHED
+  404 41168 LOG-FIL-OUT-ACCEPT  all  --  *      lo      0.0.0.0/0            127.0.0.1
+   68 17021 LOG-FIL-OUT-DROP  all  --  *      *       0.0.0.0/0            0.0.0.0/0
 ip6 pkts bytes target     prot opt in     out     source               destination
-    9   648 LOG-RAW-PRE  all      *      *       ::/0                 ::/0                
-   22  1152 LOG-RAW-OUT  all      *      *       ::/0                 ::/0                
-    0     0 LOG-FIL-IN-DROP  all      !lo    *       ::/0                 ::1                 
-    0     0 LOG-FIL-IN-ACCEPT  all      lo     *       ::/0                 ::/0                
+    0     0 LOG-RAW-PRE  all      *      *       ::/0                 ::/0
+    1    56 LOG-RAW-OUT  all      *      *       ::/0                 ::/0
+    0     0 LOG-FIL-IN-DROP  all      !lo    *       ::/0                 ::1
+    0     0 LOG-FIL-IN-ACCEPT  all      lo     *       ::/0                 ::/0
     0     0 LOG-FIL-IN-ACCEPT  all      *      *       ::/0                 ::/0                 ctstate RELATED,ESTABLISHED
     0     0 LOG-FIL-IN-DROP  all      *      *       ::/0                 ::/0                 ctstate INVALID,NEW
-    9   648 LOG-FIL-IN-DROP  all      *      *       ::/0                 ::/0                
-    0     0 LOG-FIL-FORWARD-DROP  all      *      *       ::/0                 ::/0                
-    0     0 LOG-FIL-OUT-ACCEPT  tcp      *      tun0    ::/0                 ::/0                 tcp dpt:443
-    0     0 LOG-FIL-OUT-ACCEPT  tcp      *      tun0    ::/0                 ::/0                 tcp dpt:80
-    0     0 LOG-FIL-OUT-ACCEPT  tcp      *      tun0    ::/0                 ::/0                 tcp dpt:53 owner UID match 972
-    0     0 LOG-FIL-OUT-ACCEPT  udp      *      tun0    ::/0                 ::/0                 udp dpt:53 owner UID match 972
-    0     0 LOG-FIL-OUT-ACCEPT  udp      *      br0     ::/0                 ::/0                 udp dpt:5060
-    0     0 LOG-FIL-OUT-ACCEPT  udp      *      br0     ::/0                 ::/0                 udp dpt:1194
-    0     0 LOG-FIL-OUT-ACCEPT  udp      *      br0     ::/0                 ::/0                 udp dpt:4569
-    0     0 LOG-FIL-OUT-ACCEPT  udp      *      br0     ::/0                 ::/0                 udp dpt:443
-    0     0 LOG-FIL-OUT-ACCEPT  udp      *      br0     ::/0                 ::/0                 udp dpt:80
-    0     0 LOG-FIL-OUT-ACCEPT  all      *      *       ::/0                 ::/64               
-    0     0 LOG-FIL-OUT-ACCEPT  icmp     *      *       ::/0                 ::/0                
-   13   720 LOG-FIL-OUT-DROP  all      *      *       ::/0                 ::/0                
+    0     0 LOG-FIL-IN-DROP  all      *      *       ::/0                 ::/0
+    0     0 LOG-FIL-FORWARD-DROP  all      *      *       ::/0                 ::/0
+    0     0 LOG-FIL-OUT-ACCEPT  tcp      *      wlan0   ::/0                 ::/0                 tcp dpt:443 state NEW,ESTABLISHED
+    0     0 LOG-FIL-OUT-ACCEPT  tcp      *      wlan0   ::/0                 ::/0                 tcp dpt:80 state NEW,ESTABLISHED
+    0     0 LOG-FIL-OUT-ACCEPT  tcp      *      wlan0   ::/0                 ::/0                 tcp dpt:53 owner UID match 972
+    0     0 LOG-FIL-OUT-ACCEPT  udp      *      wlan0   ::/0                 ::/0                 udp dpt:53 owner UID match 972
+    0     0 LOG-FIL-OUT-ACCEPT  all      *      *       ::/0                 ::/64
+    1    56 LOG-FIL-OUT-DROP  all      *      *       ::/0                 ::/0
 UGLY-FIREWALL: [quit] [zero-counters] [flush] [base] [load] [policy] [ip4] [ip6] [log_lvl] [interfaces]
 ```
 
@@ -117,6 +107,7 @@ UGLY-FIREWALL: [quit] [zero-counters] [flush] [base] [load] [policy] [ip4] [ip6]
 ACTION=$1
 source $(dirname $0)/uf.config.sh
 source $(dirname $0)/uf.config.interfaces.sh
+echo -e "$ACT $(basename $0)"
 ```
 2. with the iptables rules we desire, for example for dns:
 ```
@@ -128,7 +119,7 @@ $ip6tables $ACTION_OUTPUT -o $out_int -p tcp -m tcp --dport 53 -m owner --uid-ow
 ```
 3. and save it in the ugly-firewall directory with the name we want started with "rules.uf" so that uglu-firewall can find it and be available in the rule's loading menu.
 ```
-rules.uf.output.client.dns.sh
+rules.uf.output.dns.sh
 ```
 
 ## Files
