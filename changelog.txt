@@ -1,5 +1,11 @@
 Ugly-firewall
 
+version .06
+Added log ++ -- 
+Changed echo basename rulename
+Renamed rules from output.client to output.
+Added STABLISHED to output rules.
+
 version .05
 Added echo for each file that load rule,firewall,base,etc.
 for i in $(ls path/ugly-firewall/rules.uf.* ) ; do sed -i 2iecho\ \"\ [*]\ Loading\ $(echo $i | awk -F"/" '{print $5}')\" $i ;done
