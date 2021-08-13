@@ -1,10 +1,5 @@
-#Ugly-Firewall interfaces's config file
-
-############################################
-# Interfaces 
-############################################
-WAN=eth0
-LAN=bond0
+WAN=wlan0
+LAN=wlan0
 VPN=tun0
-in_int=bond0
-out_int=tun0
+in_int=wlan0
+out_int=wlan0

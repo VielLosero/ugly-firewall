@@ -25,9 +25,13 @@ if [ "$ACTION" == "DEL" ] ; then
 	ACTION_POSTROUTING="-D POSTROUTING"
 fi
 
+#arch
+#iptables=/sbin/iptables
+#ip6tables=/sbin/ip6tables
+#slackware
+iptables=/usr/sbin/iptables
+ip6tables=/usr/sbin/ip6tables
 
-iptables=/sbin/iptables
-ip6tables=/sbin/ip6tables
 
 show_ip4=1
 show_ip6=1
@@ -36,7 +40,7 @@ log_lvl=0
 
 tables=(raw nat mangle security filter)
 
-if [ $(cat /etc/hostname) == "ohm" ] ; then
+if [ "$(cat /etc/hostname)" == "ohm" ] ; then
 	tables=(raw nat mangle filter)
 fi
 
